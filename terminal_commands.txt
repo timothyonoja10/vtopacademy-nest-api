@@ -1,0 +1,54 @@
+
+// From parent directory
+
+npm i -g @nestjs/cli
+nest new project-name
+
+cd project-name
+
+npm run start
+
+http://localhost:3000/
+
+close terminal
+
+npm i --save csurf
+npm i --save @nestjs/throttler
+
+npm i --save @nestjs/config
+npm install --save @nestjs/typeorm typeorm mysql2
+npm install ts-node --save-dev
+
+npm i @nestjs/mongoose mongoose
+
+// Authentication and authorization
+npm install bcrypt
+npm install --save @nestjs/jwt
+
+npm install --save @nestjs/swagger
+
+// Confiuration
+Create Config folder/file - configuration.ts
+
+enable versionsing and other middlewares in main.ts
+add RateLimiting to app.module.ts
+
+// Add typeorm command under scripts section in package.json
+"typeorm": "typeorm-ts-node-commonjs"
+
+COMMIT
+
+
+nest g resource [name]s
+
+nest g module auth
+nest g controller auth
+
+curl -X POST http://localhost:3000/api/auth/register -d '{"username": "john", "password": "changeme", "confirmPassword": "changeme"}' -H "Content-Type: application/json"
+curl -X POST http://localhost:3000/api/auth/login -d '{"username": "john", "password": "changeme"}' -H "Content-Type: application/json"
+
+// Deploy
+Create Procfile
+
+Add this to scripts in package.json: "deploy": "npm ci && npm run build && npm run start:prod"
+npm run deploy
