@@ -49,6 +49,4 @@ curl -X POST http://localhost:3000/api/auth/login -d '{"username": "john", "pass
 
 // Deploy
 Create Procfile
-
-Add this to scripts in package.json: "deploy": "npm ci && npm run build && npm run start:prod"
-npm run deploy
+web : npm install && npm run build && npm run start:dev
