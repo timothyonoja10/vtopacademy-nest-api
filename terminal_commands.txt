@@ -47,6 +47,17 @@ nest g controller auth
 curl -X POST http://localhost:3000/api/auth/register -d '{"username": "john", "password": "changeme", "confirmPassword": "changeme"}' -H "Content-Type: application/json"
 curl -X POST http://localhost:3000/api/auth/login -d '{"username": "john", "password": "changeme"}' -H "Content-Type: application/json"
 
-// Deploy
-Create Procfile
-web : npm install && npm run build && npm run start:dev
+//login to ssh
+takeown /F .\vtopacademy-nest-api-key-pair.pem
+icacls .\vtopacademy-nest-api-key-pair.pem /inheritance:r 
+icacls .\vtopacademy-nest-api-key-pair.pem /grant:r ADDIS:R
+
+ssh -i ./vtopacademy-nest-api-key-pair.pem ubuntu@ec2-54-234-66-67.compute-1.amazonaws.com
+sudo chmod +w /home/ubuntu/nestjs-api
+sudo chown -R ubuntu:ubuntu /home/ubuntu/nestjs-api/
+
+//Terminating remote process
+sudo lsof -i :3000
+kill -9 <PID>
+
+scp - i ./vtopacademy-nest-api-key-pair.pem -r ./vtopacademy-nest-api/dist/* ubuntu@ec2-54-234-66-67.compute-1.amazonaws.com:/home/ubuntu/nestjs-api/

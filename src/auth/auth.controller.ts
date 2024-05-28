@@ -26,4 +26,5 @@ export class AuthController {
   signIn(@Body() signInDto: SignInDto): Promise<{access_token: string;}> {
     return this.authService.signIn(signInDto.username, signInDto.password);
   }
+
 }

@@ -22,31 +22,40 @@ export class AuthService {
     }
     let user = await this.usersService.findOneByUsername(username);
     if (user) {
-      throw new UnauthorizedException('Account already exist');
+      throw new UnauthorizedException('Account already exists');
     }
 
-    let role = await this.rolesService.findOneByName("User");
-    if (!role) {
-      role = await this.rolesService.create({name: "User"});
+    let roles = [];
+
+    let roleUser = await this.rolesService.findOneByName("User");
+    if (!roleUser) {
+      roleUser = await this.rolesService.create({name: "User"});
+      roles.push(roleUser);
+    }
+
+    let roleAdmin = await this.rolesService.findOneByName("Admin");
+    if (!roleAdmin && username === "timothyonoja@gmail.com") {
+      roleAdmin = await this.rolesService.create({name: "Admin"});
+      roles.push(roleAdmin);
     }
 
     user = await this.usersService.create({
       username: username,
       password: password,
-      roles: [role]
+      roles: roles
     });
 
     return true;
   }
 
-  async signIn(username: string, pass: string): Promise<{ access_token: string }> {
+  async signIn(username: string, password: string): Promise<{ access_token: string }> {
     const user = await this.usersService.findOneByUsername(username);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     // Compare hashed password
-    const passwordMatch = await bcrypt.compare(pass, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
