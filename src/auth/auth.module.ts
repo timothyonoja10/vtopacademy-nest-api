@@ -6,12 +6,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   imports: [
     UsersModule,
-    RolesModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

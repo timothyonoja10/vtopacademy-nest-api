@@ -6,7 +6,6 @@ import configuration from './config/configuration';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { SchoolsModule } from './schools/schools.module';
@@ -53,7 +52,6 @@ import { User } from './users/entities/user.entity';
       inject: [ConfigService],
     }),
     UsersModule,
-    RolesModule,
     AuthModule,
     SchoolsModule,
   ],

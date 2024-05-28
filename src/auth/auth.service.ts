@@ -2,17 +2,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { RolesService } from 'src/roles/roles.service';
-import { Roles } from 'src/roles/decorators/roles.decorator';
+import { Role } from 'src/users/entities/role.entity';
 
 @Injectable()
-@Roles('Admin')
 export class AuthService {
 
   constructor(
     private usersService: UsersService,
-    private rolesService: RolesService,
     private jwtService: JwtService,
   ) {}
 
@@ -25,25 +21,8 @@ export class AuthService {
       throw new UnauthorizedException('Account already exists');
     }
 
-    let roles = [];
-
-    let roleUser = await this.rolesService.findOneByName("User");
-    if (!roleUser) {
-      roleUser = await this.rolesService.create({name: "User"});
-      roles.push(roleUser);
-    }
-
-    let roleAdmin = await this.rolesService.findOneByName("Admin");
-    if (!roleAdmin && username === "timothyonoja@gmail.com") {
-      roleAdmin = await this.rolesService.create({name: "Admin"});
-      roles.push(roleAdmin);
-    }
-
-    user = await this.usersService.create({
-      username: username,
-      password: password,
-      roles: roles
-    });
+    const roles = username === "timothy@gmail.com" ? [Role.Admin, Role.User] : [Role.User];
+    await this.usersService.create({ username, password, roles });
 
     return true;
   }

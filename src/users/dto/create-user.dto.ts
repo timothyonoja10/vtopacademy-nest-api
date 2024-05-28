@@ -1,4 +1,4 @@
-import { Role } from "src/roles/entities/role.entity";
+import { Role } from "../entities/role.entity";
 
 export class CreateUserDto {
   readonly username: string;
