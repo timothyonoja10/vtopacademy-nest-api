@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -18,10 +18,10 @@ export class AuthService {
     }
     let user = await this.usersService.findOneByUsername(username);
     if (user) {
-      throw new UnauthorizedException('Account already exists');
+      throw new ConflictException('Account already exists');
     }
 
-    const roles = username === "timothy@gmail.com" ? [Role.Admin, Role.User] : [Role.User];
+    const roles = username === "tolu@gmail.com" ? [Role.Admin, Role.User] : [Role.User];
     await this.usersService.create({ username, password, roles });
 
     return true;
@@ -39,7 +39,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { sub: user.id, username: user.username };
+    const payload = { sub: user.id, username: user.username, roles: user.roles };
     
     return {
       access_token: await this.jwtService.signAsync(payload),

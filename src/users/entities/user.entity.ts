@@ -13,11 +13,7 @@ export class User {
   @Column()
   password: string; 
 
-  @Column({
-    type: "set",
-    enum: Role,
-    default: [Role.User],
-  })
+  @Column("simple-array")
   roles: Role[];
 
 }

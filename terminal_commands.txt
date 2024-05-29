@@ -26,6 +26,7 @@ npm install bcrypt
 npm install --save @nestjs/jwt
 
 npm install --save @nestjs/swagger
+npm install -g pm2
 
 // Confiuration
 Create Config folder/file - configuration.ts
@@ -47,17 +48,57 @@ nest g controller auth
 curl -X POST http://localhost:3000/api/auth/register -d '{"username": "john", "password": "changeme", "confirmPassword": "changeme"}' -H "Content-Type: application/json"
 curl -X POST http://localhost:3000/api/auth/login -d '{"username": "john", "password": "changeme"}' -H "Content-Type: application/json"
 
-//login to ssh
-takeown /F .\vtopacademy-nest-api-key-pair.pem
-icacls .\vtopacademy-nest-api-key-pair.pem /inheritance:r 
-icacls .\vtopacademy-nest-api-key-pair.pem /grant:r ADDIS:R
+// amazon aws
+Create IAM user and provide AWS Management console access
+Addthe user to User group
+Download the .csv file ofthe user
 
-ssh -i ./vtopacademy-nest-api-key-pair.pem ubuntu@ec2-54-234-66-67.compute-1.amazonaws.com
+Login to the IAM user in an incognito app
+Go to EC2 on the IAM user in incognito tab 
+Launch an instance, input name, select Ubuntu Image, generate a key pair,
+  allow SSH, http from anywhere,
+  Expand Advance details and add the bash commands below to user data:
+    #!/bin/bash
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    sudo apt-get install -y nodejs npm
+    mkdir /home/ubuntu/nestjs-api
+  Launch instance
+Go to instances, and click on the created instance
+
+Cretae role, add EC2 Access.
+On the EC2 instance, go to actions -> security -> Modify IAM access roleand select the
+  the created role
+
+Go to security section of the running instance
+  Add a new Inbound rule. port range - 3000, source type - Anywhere IPV4
+
+
+//login to ssh
+takeown /F .\vtopacademy-nest-api-keypair.pem
+icacls .\vtopacademy-nest-api-keypair.pem /inheritance:r 
+icacls .\vtopacademy-nest-api-keypair.pem /grant:r ADDIS:R
+
+ssh -i ./vtopacademy-nest-api-keypair.pem ubuntu@ec2-54-205-235-247.compute-1.amazonaws.com
 sudo chmod +w /home/ubuntu/nestjs-api
 sudo chown -R ubuntu:ubuntu /home/ubuntu/nestjs-api/
+
 
 //Terminating remote process
 sudo lsof -i :3000
 kill -9 <PID>
 
-scp - i ./vtopacademy-nest-api-key-pair.pem -r ./vtopacademy-nest-api/dist/* ubuntu@ec2-54-234-66-67.compute-1.amazonaws.com:/home/ubuntu/nestjs-api/
+npm run build before transfer
+
+scp -i ./vtopacademy-nest-api-keypair.pem ./vtopacademy-nest-api/package.json ubuntu@ec2-54-205-235-247.compute-1.amazonaws.com:/home/ubuntu/nestjs-api/
+scp -i ./vtopacademy-nest-api-keypair.pem ./vtopacademy-nest-api/.env ubuntu@ec2-54-205-235-247.compute-1.amazonaws.com:/home/ubuntu/nestjs-api/
+scp -i ./vtopacademy-nest-api-keypair.pem -r ./vtopacademy-nest-api/dist/* ubuntu@ec2-54-205-235-247.compute-1.amazonaws.com:/home/ubuntu/nestjs-api/
+
+// In the remote server connected via SSH
+ls
+cd nestjs-api
+node -v
+npm install
+node main.js
+
+nohup node main.js &
