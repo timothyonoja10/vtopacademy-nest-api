@@ -27,6 +27,8 @@ npm install --save @nestjs/jwt
 
 npm install --save @nestjs/swagger
 
+npm i --save-dev @nestjs/testing
+
 // Confiuration
 Create Config folder/file - configuration.ts
 
