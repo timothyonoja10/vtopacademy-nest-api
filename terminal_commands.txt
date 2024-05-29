@@ -26,7 +26,6 @@ npm install bcrypt
 npm install --save @nestjs/jwt
 
 npm install --save @nestjs/swagger
-npm install -g pm2
 
 // Confiuration
 Create Config folder/file - configuration.ts
@@ -55,7 +54,7 @@ Download the .csv file ofthe user
 
 Login to the IAM user in an incognito app
 Go to EC2 on the IAM user in incognito tab 
-Launch an instance, input name, select Ubuntu Image, generate a key pair,
+Launch an instance, input name, select Ubuntu Image, generate and save a key pair,
   allow SSH, http from anywhere,
   Expand Advance details and add the bash commands below to user data:
     #!/bin/bash
