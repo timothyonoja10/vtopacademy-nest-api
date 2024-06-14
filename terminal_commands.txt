@@ -29,6 +29,10 @@ npm install --save @nestjs/swagger
 
 npm i --save-dev @nestjs/testing
 
+// Nodemailer email sender
+npm i --save @nestjs-modules/mailer nodemailer
+npm i --save-dev @types/nodemailer
+
 // Confiuration
 Create Config folder/file - configuration.ts
 

@@ -18,5 +18,10 @@ export default () => ({
     jwt: {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_EXPIRES_IN,
+    },
+    emailService: {
+      host: process.env.EMAIL_SERVICE_HOST,
+      username: process.env.EMAIL_SERVICE_USERNAME,
+      password: process.env.EMAIL_SERVICE_PASSWORD
     }
   });

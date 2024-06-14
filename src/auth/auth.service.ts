@@ -48,4 +48,26 @@ export class AuthService {
     const response = new ResponseDto(accessToken, isAdmin, isUser);
     return response;
   }
+
+  async isNotRegisteredUser(username: string): Promise<boolean> {
+    const user = await this.usersService.findOneByUsername(username);
+    if (!user) {
+      return true;
+    }
+    return false;
+  }
+
+  async updateUser(username: string, password: string): Promise<boolean> {
+    const user = await this.usersService.findOneByUsername(username);
+    const result = await this.usersService.update(user.id, username, password, user.roles);
+    return true;
+  }
+
+  async verifyForgotPasswordCode(username: string, code: string): Promise<boolean> {
+    return await this.usersService.verifyForgotPasswordCode(username, code);
+  }
+
+  async saveForgotPasswordCode(username: string, code: string): Promise<boolean> {
+    return await this.usersService.saveForgotPassswordCode(username, code);
+  }
 }

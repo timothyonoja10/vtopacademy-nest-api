@@ -7,10 +7,11 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { ForgotPasswordCode } from './entities/ForgotPasswordCode';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, ForgotPasswordCode]),
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

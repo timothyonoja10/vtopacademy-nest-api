@@ -35,7 +35,9 @@ export class UsersController {
   @Patch(':id')
   @Roles(Role.Admin)
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    return await this.usersService.update(id, updateUserDto);
+    return await this.usersService.update(
+      id, updateUserDto.username, updateUserDto.password, updateUserDto.roles
+    );
   }
 
   @Delete(':id')

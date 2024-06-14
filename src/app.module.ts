@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { SchoolsModule } from './schools/schools.module';
 import { School } from './schools/entities/school.entity';
 import { User } from './users/entities/user.entity';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ForgotPasswordCode } from './users/entities/ForgotPasswordCode';
 
 @Module({
   imports: [
@@ -39,7 +41,7 @@ import { User } from './users/entities/user.entity';
         password: configService.get('database.password'),
         database: configService.get('database.name'),
         autoLoadEntities: true,  
-        entities: [User, School],
+        entities: [User, School, ForgotPasswordCode],
         synchronize: true, // Use false in production
       }),
       inject: [ConfigService],
@@ -50,6 +52,15 @@ import { User } from './users/entities/user.entity';
         uri: configService.get<string>('mongodb.uri'),
       }),
       inject: [ConfigService],
+    }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.EMAIL_SERVICE_HOST,
+        auth: {
+          user: process.env.EMAIL_SERVICE_USERNAME,
+          pass: process.env.EMAIL_SERVICE_PASSWORD,
+        },  
+      },
     }),
     UsersModule,
     AuthModule,
