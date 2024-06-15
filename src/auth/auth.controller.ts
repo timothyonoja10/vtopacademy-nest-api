@@ -47,7 +47,7 @@ export class AuthController {
       if (isNotRegisteredUser) {
         throw new UnauthorizedException('Not a registered user');
       }
-      const forgotPasswordCode = '123456'; // This should be dynamically generated in a real application
+      const forgotPasswordCode = this.generateForgotPasswordCode(); 
       const email = new Email(
         'Vtopacademy <vtopacademy@gmail.com>',
         username,
@@ -69,6 +69,13 @@ export class AuthController {
     } catch (error) {
       throw new UnauthorizedException(`Unable to send email ${error}`);
     }  
+  }
+
+  generateForgotPasswordCode(): string {
+    const min = 100000;
+    const max = 999999;
+    const code = Math.floor(Math.random() * (max - min + 1)) + min;
+    return code.toString();
   }
 
   @Public()
