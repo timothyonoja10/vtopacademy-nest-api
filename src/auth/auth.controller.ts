@@ -11,12 +11,12 @@ import { MailerService } from '@nestjs-modules/mailer';
 
 @Controller({
   path: 'api/auth',
-  version: VERSION_NEUTRAL, 
+  version: VERSION_NEUTRAL,
 })
 export class AuthController {
   constructor(
-    private authService: AuthService, 
-    private readonly mailService: MailerService
+    private readonly authService: AuthService,
+    private readonly mailService: MailerService,
   ) {}
 
   @Public()
@@ -24,79 +24,78 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerDto: RegisterDto): Promise<ResponseDto> {
     await this.authService.register(
-      registerDto.username, registerDto.password, registerDto.confirmPassword
+      registerDto.username,
+      registerDto.password,
+      registerDto.confirmPassword,
     );
-    let signInDto = new SignInDto(registerDto.username, registerDto.password);
-    return await this.signIn(signInDto);
+    return await this.signIn({ username: registerDto.username, password: registerDto.password });
   }
 
   @Public()
-  @HttpCode(HttpStatus.OK) 
+  @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Body() signInDto: SignInDto): Promise<ResponseDto> {
     return await this.authService.signIn(signInDto.username, signInDto.password);
-  } 
-  
+  }
+
   @Public()
-  @HttpCode(HttpStatus.OK) 
+  @HttpCode(HttpStatus.OK)
   @Post('forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<boolean> {
-    try {
-      const username = forgotPasswordDto.username;
-      const isNotRegisteredUser = await this.authService.isNotRegisteredUser(username);
-      if (isNotRegisteredUser) {
-        throw new UnauthorizedException('Not a registered user');
-      }
-      const forgotPasswordCode = this.generateForgotPasswordCode(); 
-      const email = new Email(
-        'Vtopacademy <vtopacademy@gmail.com>',
-        username,
-        'Reset Your Password',
-        `Dear User,
-      
-        We received a request to reset your password. Use the code below to reset your password:
-
-        Forgot Password Code: ${forgotPasswordCode}
-
-        If you didn't request a password reset, please ignore this email or contact support if you have any questions.
-
-        Best regards,
-        Vtopacademy Support Team`
-      );
-      this.mailService.sendMail(email);
-      await this.authService.saveForgotPasswordCode(username, forgotPasswordCode);
-      return true;
-    } catch (error) {
-      throw new UnauthorizedException(`Unable to send email ${error}`);
-    }  
-  }
-
-  generateForgotPasswordCode(): string {
-    const min = 100000;
-    const max = 999999;
-    const code = Math.floor(Math.random() * (max - min + 1)) + min;
-    return code.toString();
-  }
-
-  @Public()
-  @HttpCode(HttpStatus.OK) 
-  @Post('change-password')
-  async changePassword(
-    @Body() changePasswordDto: ChangePasswordDto
-  ): Promise<ResponseDto> {
-    const username = changePasswordDto.username;
-    const newPassword = changePasswordDto.newPassword;
-    const code = changePasswordDto.code;
+    const username = forgotPasswordDto.username;
     const isNotRegisteredUser = await this.authService.isNotRegisteredUser(username);
+
     if (isNotRegisteredUser) {
       throw new UnauthorizedException('Not a registered user');
     }
-    const verified = this.authService.verifyForgotPasswordCode(username, code);
-    if (!verified) {
-      throw new UnauthorizedException('Invalid forgot password code');;
+
+    const forgotPasswordCode = this.generateForgotPasswordCode();
+    const email = new Email(
+      'Vtopacademy <vtopacademy@gmail.com>',
+      username,
+      'Reset Your Password',
+      `Dear User,
+
+      We received a request to reset your password. Use the code below to reset your password:
+
+      Forgot Password Code: ${forgotPasswordCode}
+
+      If you didn't request a password reset, please ignore this email or contact support if you have any questions.
+
+      Best regards,
+      Vtopacademy Support Team`
+    );
+
+    await this.mailService.sendMail(email);
+    await this.authService.saveForgotPasswordCode(username, forgotPasswordCode);
+
+    return true;
+  }
+
+  private generateForgotPasswordCode(): string {
+    const min = 100000;
+    const max = 999999;
+    return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('change-password')
+  async changePassword(@Body() changePasswordDto: ChangePasswordDto): Promise<ResponseDto> {
+    const { username, newPassword, code } = changePasswordDto;
+    const isNotRegisteredUser = await this.authService.isNotRegisteredUser(username);
+
+    if (isNotRegisteredUser) {
+      throw new UnauthorizedException('Not a registered user');
     }
-    const updated = await this.authService.updateUser(username, newPassword);
-    let signInDto = new SignInDto(username, newPassword);
-    return await this.signIn(signInDto);
+
+    const verified = await this.authService.verifyForgotPasswordCode(username, code);
+    if (!verified) {
+      throw new UnauthorizedException('Invalid forgot password code');
+    }
+
+    await this.authService.updateUser(username, newPassword);
+
+    return await this.signIn({ username, password: newPassword });
   }
 }
