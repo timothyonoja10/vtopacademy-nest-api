@@ -56,6 +56,8 @@ import { ForgotPasswordCode } from './users/entities/ForgotPasswordCode';
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_SERVICE_HOST,
+        port: parseInt(process.env.EMAIL_SERVICE_PORT, 10),
+        secure: false,
         auth: {
           user: process.env.EMAIL_SERVICE_USERNAME,
           pass: process.env.EMAIL_SERVICE_PASSWORD,
