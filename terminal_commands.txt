@@ -25,6 +25,9 @@ npm i @nestjs/mongoose mongoose
 npm install bcrypt
 npm install --save @nestjs/jwt
 
+// Validation
+npm i --save class-validator class-transformer
+
 npm install --save @nestjs/swagger
 
 npm i --save-dev @nestjs/testing
@@ -100,7 +103,7 @@ scp -i ./vtopacademy-nest-api-keypair.pem ./vtopacademy-nest-api/.env ubuntu@ec2
 scp -i ./vtopacademy-nest-api-keypair.pem -r ./vtopacademy-nest-api/dist/* ubuntu@ec2-54-205-235-247.compute-1.amazonaws.com:/home/ubuntu/nestjs-api/
 
 // In the remote server connected via SSH
-ls
+ls 
 cd nestjs-api
 node -v
 npm install
