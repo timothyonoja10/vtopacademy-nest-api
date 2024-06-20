@@ -110,3 +110,4 @@ npm install
 node main.js
 
 nohup node main.js &
+nohup node server.js > /dev/null 2>&1 &
