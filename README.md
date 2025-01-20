@@ -96,4 +96,5 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+Vtopacademy is [Proprietary licensed](LICENSE). You may not use, copy, modify, or distribute this code without explicit permission from the author.
+
