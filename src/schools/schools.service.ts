@@ -41,6 +41,6 @@ export class SchoolsService {
   }
 
   async remove(schoolId: number) {
-    await this,this.schoolsRepository.delete(schoolId);
+    await this.schoolsRepository.delete(schoolId);
   }
 }

@@ -20,6 +20,7 @@ import { ForgotPasswordCode } from './users/entities/ForgotPasswordCode';
       isGlobal: true,
       load: [configuration],
       cache: false, // Use true in production
+      envFilePath: '.development.env' // Comment this line in production
     }),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],

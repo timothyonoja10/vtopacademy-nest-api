@@ -8,7 +8,7 @@ cd project-name
 
 npm run start
 
-http://localhost:3000/
+http://localhost:8000/
 
 close terminal
 
@@ -111,3 +111,17 @@ node main.js
 
 nohup node main.js &
 nohup node main.js > /dev/null 2>&1 &
+
+
+// start MySQL on windows
+cd C:\Program Files\MySQL\MySQL Server 8.2\bin
+net start MySQL
+mysql -u root -p
+CREATE DATABASE vtopacademydb;
+
+// start MySQL on Linux/Mac
+sudo service mysql start
+mysql -u root -p
+CREATE DATABASE database_name;
+
+start mongodb compass on local
