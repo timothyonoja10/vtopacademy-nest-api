@@ -32,7 +32,7 @@ A nest js backend api for accessing the following resources: schools, exams, cla
 $ npm install
 ```
 
-## Environment variables in .env or .development.env
+## Environment variables
 
 ```bash
 PORT=  
@@ -85,7 +85,14 @@ $ npm run test:cov
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Vtopacademy is a tutorial platform designed to help students excel in their studies. This project thrives thanks to the amazing support from sponsors and contributors. If you'd like to support Vtopacademy and help us grow, please consider:
+
+- [Becoming a sponsor](#) (link to a sponsorship page or platform like GitHub Sponsors or Patreon)
+- [Making a one-time contribution](#) (link to a donation platform like PayPal, Buy Me a Coffee, etc.)
+- [Contributing code or ideas](#) (link to the repository's contribution guidelines)
+
+Your support is invaluable and helps us provide better resources for students. Thank you!
+
 
 ## Stay in touch
 
